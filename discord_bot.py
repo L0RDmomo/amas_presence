@@ -13,6 +13,7 @@ class SlashCommandClient(discord.Client):
     def __init__(self, *, intents: discord.Intents):
         super().__init__(intents=intents)
         self.tree = app_commands.CommandTree(self)
+        self.get_players_response = None
 
     async def setup_hook(self):
         # This copies the global commands over to your guild.
@@ -27,6 +28,30 @@ if __name__ == "__main__":
         token = f.read()
     intents = discord.Intents.default()
     client = SlashCommandClient(intents=intents)
+
+    @client.tree.command(
+        name="getplayers",
+        description="post a message, then pull a list of reactors",
+        guilds=[
+            BOT_TEST_GUILD,
+            # AMA_PRES_GUILD
+        ],
+    )
+    async def getplayers(interaction):
+        if client.get_players_response:
+            client.get_players_response = await client.get_players_response.fetch()
+            reactors = [
+                (x.name, x.id)
+                for y in client.get_players_response.reactions
+                async for x in y.users()
+            ]
+            await interaction.response.send_message(str(reactors))
+            client.get_players_response = None
+        else:
+            await interaction.response.send_message(
+                "Respond to this message to register for matchmaking"
+            )
+            client.get_players_response = await interaction.original_response()
 
     @client.tree.command(
         name="sync",
