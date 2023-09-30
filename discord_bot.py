@@ -23,6 +23,8 @@ class SlashCommandClient(discord.Client):
 
 
 if __name__ == "__main__":
+    with open("../amas_presence_bot_token.txt", "r") as f:
+        token = f.read()
     intents = discord.Intents.default()
     client = SlashCommandClient(intents=intents)
 
@@ -86,6 +88,4 @@ if __name__ == "__main__":
 
         await interaction.edit_original_response(content=response)
 
-    client.run(
-        "MTE1NzQxMDg4Mjk5Nzk4MTI3NQ.GLsrK1.Qytsd8zogQKwMO3yIJuYca-Fojmgi5bnSkmkrA"
-    )
+    client.run(token)

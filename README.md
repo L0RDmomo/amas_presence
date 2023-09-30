@@ -11,10 +11,11 @@ poetry install
 ```
 
 ## Auth Instructions
-Follow the steps (here)[] to retrieve a service account token `.json` file. Name it `gspread_auth_token.json` and place it one directory above the directory containing these files. In other words, place it in the directory which contains the directory containing these files.
+Follow the steps (here)[] to retrieve a service account token `.json` file. Name it `gspread_auth_token.json` and place it one directory above the directory containing these files. In other words, place it in the directory which contains the directory containing these files. Also acquire the bot token from Momo, and place it in the same location.
 ```
 stuff.txt
 gspread_auth_token.json
+amas_presence_helper_bot_token.txt
 amas_presence
     discord_bot.py
     pyproject.toml
