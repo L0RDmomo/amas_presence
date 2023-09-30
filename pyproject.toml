@@ -1,0 +1,21 @@
+[tool.poetry]
+name = "amas-presence"
+version = "0.1.0"
+description = ""
+authors = ["L0RDmomo <jazkworld@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+gspread = "^5.11.2"
+oauth2client = "^4.1.3"
+discord-py = "^2.3.2"
+
+[tool.poetry.group.dev.dependencies]
+ruff = "^0.0.291"
+pytest = "^7.4.2"
+black = "^23.9.1"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
