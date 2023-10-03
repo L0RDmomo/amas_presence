@@ -80,6 +80,34 @@ def convert_fetched_data_to_objs(data, form_data):
     return objs, errs
 
 
+def get_discord_id_to_ign_map(auth_token_path, id_data):
+    if isfile("form_data_dump.json"):
+        with open("form_data_dump.json", "r") as f:
+            form_data = json.load(f)
+    else:
+        form_data = fetch_google_sheet_data(
+            GSHEET_URL, "Season 1 Form", auth_token_path
+        )[1:]
+        with open("form_data_dump.json", "w+") as f:
+            json.dump(form_data, f)
+
+    discord_nickname_to_ign = {}
+    for r in form_data:
+        discord_nickname_to_ign[r[3].lower()] = r[2]
+
+    discord_id_to_ign = {}
+    unfound_members = []
+    for member in id_data:
+        if member["nickname"].lower() in discord_nickname_to_ign:
+            discord_id_to_ign[member["id"]] = discord_nickname_to_ign[
+                member["nickname"].lower()
+            ]
+        else:
+            unfound_members.append(member["nickname"])
+
+    return discord_id_to_ign, unfound_members
+
+
 def sync(auth_token_path):
     data = fetch_google_sheet_data(GSHEET_URL, "All Divisions", auth_token_path)
     with open("data_dump.json", "w+") as f:
