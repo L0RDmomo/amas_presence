@@ -100,6 +100,11 @@ if __name__ == "__main__":
         if errs:
             response += "\n```" + "\n".join(errs) + "```"
 
+        if len(response) > 1900:
+            response = (
+                response[:1900] + "\n...\nCouldn't fit all errs in msg, check logs."
+            )
+
         await interaction.edit_original_response(content=response)
 
     @client.tree.command(
