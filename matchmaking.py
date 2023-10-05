@@ -11,6 +11,7 @@ class PlayerRoleMMR:
     role: str
     mmr: int
     primary_role: bool
+    num_games_played: int
 
 
 Players = Set[PlayerRoleMMR]
@@ -54,6 +55,17 @@ def match_quality(match: Match) -> int:
     return ((overall_mmr * 0.4) + (by_role_mmr * 0.6)) * (
         1.0 - (0.04 * len(players_on_primary_role))
     )
+
+
+def match_avg_mmr_diff(match: Match) -> Tuple[float, float]:
+    overall_mmr = abs(sum((x.mmr for x in match[0])) - sum((x.mmr for x in match[1])))
+    by_role_mmr = 0
+    for role in valid_roles:
+        match_0_role = [x for x in match[0] if x.role == role][0]
+        match_1_role = [x for x in match[1] if x.role == role][0]
+        by_role_mmr += abs(match_0_role.mmr - match_1_role.mmr)
+
+    return overall_mmr / 10, by_role_mmr / 5
 
 
 def build_teams(

@@ -4,7 +4,7 @@ from discord import app_commands
 import json
 
 from pull_player_data_from_gsheet import get_objs, sync, get_discord_id_to_ign_map
-from matchmaking import matchmake, match_quality
+from matchmaking import matchmake, match_quality, match_avg_mmr_diff
 
 AUTH_TOKEN_PATH = "../gspread_auth_token.json"
 BOT_TEST_GUILD_ID = 743294122567401503
@@ -121,7 +121,8 @@ if __name__ == "__main__":
         for match in matches:
             i += 1
             team_num = 0
-            response += f"```Match {i}:\tMatch Score: {match_quality(match)}\n"
+            overall_mmr_diff, by_role_mmr_diff = match_avg_mmr_diff(match)
+            response += f"```Match {i}:\tMatch Score: {match_quality(match)}\tOverall MMR Diff: {overall_mmr_diff}\tBy-Role MMR Diff: {by_role_mmr_diff}\n"
             response += f"\tTeam {team_num+1}:\n"
             response += f"\t\tSolo:     {[x.player_id for x in match[team_num] if x.role == 'solo'][0]}\n"
             response += f"\t\tJg:       {[x.player_id for x in match[team_num] if x.role == 'jg'][0]}\n"

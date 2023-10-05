@@ -53,6 +53,7 @@ def convert_fetched_data_to_objs(data, form_data):
 
     for row in data[3:]:
         ign = row[3].lower()
+        num_games_played = int(row[4])
 
         player_mmr = {
             "carry": int(row[7]),
@@ -73,7 +74,11 @@ def convert_fetched_data_to_objs(data, form_data):
             if role in player_roles["allowed_roles"]:
                 objs.append(
                     PlayerRoleMMR(
-                        ign, role, player_mmr[role], role == player_roles["main_role"]
+                        ign,
+                        role,
+                        player_mmr[role],
+                        role == player_roles["main_role"],
+                        num_games_played,
                     )
                 )
 
@@ -86,7 +91,7 @@ def get_discord_id_to_ign_map(auth_token_path, id_data):
             form_data = json.load(f)
     else:
         form_data = fetch_google_sheet_data(
-            GSHEET_URL, "Season 1 Form", auth_token_path
+            GSHEET_URL, "S1Sp2 SignUps", auth_token_path
         )[1:]
         with open("form_data_dump.json", "w+") as f:
             json.dump(form_data, f)
@@ -113,7 +118,7 @@ def sync(auth_token_path):
     with open("data_dump.json", "w+") as f:
         json.dump(data, f)
 
-    form_data = fetch_google_sheet_data(GSHEET_URL, "Season 1 Form", auth_token_path)[
+    form_data = fetch_google_sheet_data(GSHEET_URL, "S1Sp2 SignUps", auth_token_path)[
         1:
     ]
     with open("form_data_dump.json", "w+") as f:
@@ -140,7 +145,7 @@ def get_objs(auth_token_path):
             form_data = json.load(f)
     else:
         form_data = fetch_google_sheet_data(
-            GSHEET_URL, "Season 1 Form", auth_token_path
+            GSHEET_URL, "S1Sp2 SignUps", auth_token_path
         )[1:]
         with open("form_data_dump.json", "w+") as f:
             json.dump(form_data, f)
