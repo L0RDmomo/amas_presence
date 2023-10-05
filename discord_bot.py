@@ -59,9 +59,17 @@ if __name__ == "__main__":
         client.discord_id_to_ign, unfound_members = get_discord_id_to_ign_map(
             AUTH_TOKEN_PATH, id_data
         )
-        await interaction.edit_original_response(
-            content=f"Could not find the following names in the Season 1 Form Sheet\n```{json.dumps(unfound_members, indent=2)}```"
-        )
+        response = f"Could not find the following names in the Season 1 Form Sheet\n```{json.dumps(unfound_members, indent=2)}"
+
+        if len(response) > 1900:
+            response = (
+                response[:1900]
+                + "```\n...\nCould not fit all unfound names in message, please check logs"
+            )
+            print(json.dumps(unfound_members, indent=2))
+        else:
+            response += "```"
+        await interaction.edit_original_response(content=response)
 
     @client.tree.command(
         name="getplayers",
